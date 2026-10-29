@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía del integrador · Matemática 4.º I · Versión 2</title>
+<style>
+  :root{
+    --g900:#1B4D2B; --g700:#2E7D3E; --g200:#BFE0C1; --g100:#E6F2E6; --g50:#F3F9F3;
+    --red:#B3302A; --ink:#1B2733; --muted:#55645B; --line:#D5E3D6; --white:#fff; --amber:#E8A33D;
+    --ok:#1E7A3E; --bad:#B3302A;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; font-family:"Calibri","Segoe UI",system-ui,-apple-system,sans-serif; font-size:17px; line-height:1.55; color:var(--ink); background:var(--white); }
+  h1,h2,h3{ font-family:"Cambria","Georgia",serif; color:var(--g900); line-height:1.2; margin:0; }
+  button,select,textarea,input{ font:inherit; color:inherit; }
+  :focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+
+  header.top{ background:var(--g900); color:#fff; padding:22px 0 0; }
+  .top-inner{ max-width:980px; margin:0 auto; padding:0 24px; }
+  .school{ font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:#CFE8D2; margin:0 0 6px; }
+  header.top h1{ color:#fff; font-size:30px; }
+  .sub{ margin:6px 0 0; color:#DDEFE0; font-size:15px; }
+  .namebar{ display:flex; flex-wrap:wrap; gap:12px 20px; align-items:center; margin:16px 0 14px; }
+  .namebar label{ font-size:14px; color:#CFE8D2; }
+  .namebar input{ background:#fff; color:var(--ink); border:0; border-radius:8px; padding:8px 12px; min-width:260px; }
+  .overall{ display:flex; align-items:center; gap:10px; font-size:14px; color:#DDEFE0; margin-left:auto; }
+  .bar{ width:160px; height:8px; background:rgba(255,255,255,.25); border-radius:8px; overflow:hidden; }
+  .bar > span{ display:block; height:100%; background:var(--amber); width:0; transition:width .3s; }
+  nav.tabs{ display:flex; flex-wrap:wrap; gap:4px; }
+  nav.tabs button{ background:transparent; border:0; color:#DDEFE0; padding:12px 18px; border-radius:10px 10px 0 0; cursor:pointer; font-weight:600; font-size:16px; }
+  nav.tabs button[aria-selected="true"]{ background:#fff; color:var(--g900); }
+  nav.tabs button:hover:not([aria-selected="true"]){ background:rgba(255,255,255,.12); }
+
+  main{ max-width:980px; margin:0 auto; padding:28px 24px 60px; }
+  .banner{ background:var(--g200); border:1px solid var(--g700); border-radius:12px; padding:16px 20px; margin-bottom:26px; }
+  .banner .eyebrow{ font-size:13px; font-weight:700; letter-spacing:.1em; color:var(--g900); }
+  .banner h2{ font-size:24px; margin-top:4px; }
+  section.block{ margin:0 0 34px; }
+  section.block > h3{ font-size:21px; margin-bottom:6px; }
+  section.block > h3 .n{ display:inline-flex; width:30px; height:30px; border-radius:50%; background:var(--g900); color:#fff; align-items:center; justify-content:center; font-family:"Calibri",sans-serif; font-size:16px; margin-right:10px; vertical-align:2px; }
+  .lead{ color:var(--muted); margin:0 0 14px; }
+  .note{ background:var(--g50); border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin:0 0 20px; }
+  .note b{ color:var(--g900); }
+
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:0 0 28px; padding:0; list-style:none; }
+  .steps li{ background:var(--g50); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .steps .num{ display:inline-flex; width:30px; height:30px; border-radius:50%; background:var(--g900); color:#fff; align-items:center; justify-content:center; font-weight:700; margin-bottom:8px; }
+
+  .cal-h{ font-size:20px; margin:6px 0 10px; }
+  .cal{ border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:18px; }
+  .cal-row{ display:grid; grid-template-columns:150px 80px 1fr; gap:10px; padding:10px 14px; border-bottom:1px solid var(--line); align-items:baseline; }
+  .cal-row:last-child{ border-bottom:0; background:var(--g100); font-weight:600; }
+  .cal-date{ font-weight:700; color:var(--g900); } .cal-tag{ color:var(--muted); font-size:15px; }
+  @media (max-width:760px){ .cal-row{ grid-template-columns:1fr; gap:2px; } }
+  .tcards{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .tcard{ border:1px solid var(--line); border-radius:14px; padding:18px; background:#fff; display:flex; flex-direction:column; gap:10px; }
+  .tcard .eyebrow{ font-size:13px; font-weight:700; letter-spacing:.1em; color:var(--g700); }
+  .tcard h3{ font-size:19px; }
+  .tcard ul{ margin:0; padding-left:18px; color:var(--muted); font-size:15px; }
+  .tcard .stats{ font-size:14px; color:var(--muted); margin-top:auto; }
+  .btn{ background:var(--g900); color:#fff; border:0; border-radius:10px; padding:10px 16px; cursor:pointer; font-weight:600; }
+  .btn:hover{ background:var(--g700); }
+  .btn.ghost{ background:#fff; color:var(--g900); border:1px solid var(--g700); }
+  .btn.ghost:hover{ background:var(--g50); }
+  .btn.small{ padding:7px 12px; font-size:15px; }
+
+  .bloque{ margin:0 0 18px; }
+  .bloque h4{ margin:0 0 8px; font-size:17px; color:var(--g700); font-family:"Calibri",sans-serif; }
+  .act{ display:grid; grid-template-columns:auto 1fr auto; gap:6px 14px; align-items:center; border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:8px; background:#fff; }
+  .chip{ background:var(--red); color:#fff; font-weight:700; border-radius:8px; padding:3px 9px; font-size:14px; white-space:nowrap; }
+  .act .t{ font-weight:700; }
+  .act .d{ color:var(--muted); font-size:15px; }
+  .act select{ border:1px solid var(--g700); border-radius:8px; padding:7px 10px; background:#fff; min-width:160px; }
+  .act[data-st="terminada"]{ background:var(--g100); border-color:var(--g700); }
+  .act[data-st="ayuda"]{ border-color:var(--red); }
+  .clases{ border:1px dashed var(--g700); border-radius:12px; padding:12px 16px; margin-bottom:18px; }
+  .clases ol{ margin:6px 0 0; padding-left:20px; }
+
+  textarea{ width:100%; border:1px solid var(--g700); border-radius:10px; padding:10px 12px; resize:vertical; min-height:90px; background:#fff; }
+  .q{ margin-bottom:20px; }
+  .q label{ display:block; font-weight:700; margin-bottom:6px; }
+  .q .hint{ font-weight:400; color:var(--muted); font-size:15px; }
+
+  .checklist{ list-style:none; padding:0; margin:0 0 8px; }
+  .checklist li{ margin-bottom:6px; }
+  .checklist label{ display:flex; gap:10px; align-items:flex-start; cursor:pointer; padding:8px 12px; border:1px solid var(--line); border-radius:10px; }
+  .checklist input{ margin-top:5px; width:18px; height:18px; accent-color:var(--g700); flex-shrink:0; }
+  .checklist input:checked + span{ color:var(--g900); font-weight:600; }
+  .counter{ font-size:15px; color:var(--muted); margin:6px 0 24px; }
+
+  .sit{ border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:16px; }
+  .sit .sq{ font-weight:700; margin:0 0 10px; }
+  .opts{ display:grid; gap:6px; margin-bottom:12px; }
+  .opt{ display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line); border-radius:10px; padding:8px 12px; cursor:pointer; }
+  .opt input{ margin-top:5px; width:18px; height:18px; accent-color:var(--g700); flex-shrink:0; }
+  .opt.ok{ border-color:var(--ok); background:#E6F4EA; }
+  .opt.no{ border-color:var(--bad); background:#FBECEA; }
+  .opt.miss{ border-color:var(--amber); background:#FFF6E3; }
+  .sym{ font-family:Consolas,"DejaVu Sans Mono","Courier New",monospace; font-size:19px; letter-spacing:.04em; }
+  .opt .mark{ margin-left:auto; font-size:14px; font-weight:700; white-space:nowrap; }
+  .feedback{ margin-top:12px; padding:12px 14px; border-radius:10px; background:var(--g50); border:1px solid var(--line); }
+  .feedback[hidden]{ display:none; }
+  .feedback b{ display:block; margin-bottom:2px; }
+  .feedback.good{ border-color:var(--ok); }
+  .feedback.almost{ border-color:var(--amber); }
+
+  .pager{ display:flex; justify-content:space-between; gap:12px; margin-top:30px; flex-wrap:wrap; }
+  .tools{ display:flex; gap:10px; flex-wrap:wrap; margin-top:34px; padding-top:18px; border-top:1px solid var(--line); align-items:center; }
+  .privacy{ font-size:14px; color:var(--muted); margin:0; }
+  .printhead{ display:none; }
+
+  @media (max-width:760px){
+    .steps,.tcards{ grid-template-columns:1fr; }
+    .act{ grid-template-columns:auto 1fr; }
+    .act select{ grid-column:1 / -1; }
+    .overall{ margin-left:0; }
+  }
+  @media print{
+    header.top nav, .tools, .pager, .btn, .overall{ display:none !important; }
+    header.top{ background:#fff; color:var(--ink); padding:0; }
+    header.top h1{ color:var(--g900); } .school,.sub{ color:var(--muted); }
+    .namebar{ display:none; }
+    .printhead{ display:block; margin-bottom:10px; font-size:15px; }
+    .view{ display:block !important; page-break-before:always; }
+    .view:first-of-type{ page-break-before:auto; }
+    textarea{ border:1px solid #999; resize:none; }
+    .act,.sit,.q,.bloque{ break-inside:avoid; }
+    body{ font-size:12.5px; line-height:1.4; }
+    main{ padding:0; max-width:none; }
+    header.top h1{ font-size:22px; }
+    .banner{ padding:8px 14px; margin-bottom:12px; } .banner h2{ font-size:18px; }
+    section.block{ margin-bottom:14px; } section.block > h3{ font-size:16px; } section.block > h3 .n{ width:24px; height:24px; font-size:13px; }
+    .note,.steps li,.tcard,.sit{ padding:8px 12px; } .steps{ gap:8px; margin-bottom:12px; } .tcards{ gap:8px; }
+    .act{ padding:6px 10px; margin-bottom:5px; } .act .d{ font-size:12px; } .act select{ padding:2px 6px; min-width:120px; }
+    .q{ margin-bottom:10px; } .q label{ margin-bottom:3px; }
+    .checklist label{ padding:4px 10px; } .checklist li{ margin-bottom:3px; } .counter{ display:none; }
+    .opt{ padding:4px 10px; } .opts{ gap:4px; margin-bottom:6px; }
+    .sit .btn,.sit .feedback{ display:none !important; }
+    .tcard .btn,.tcard .stats{ display:none !important; }
+    .tcard h3{ font-size:14px; } .tcard ul{ font-size:12px; } .steps .num{ width:22px; height:22px; margin-bottom:2px; }
+    .printhead{ margin-bottom:6px; } header.top{ margin-bottom:6px; } header.top h1{ font-size:20px; } .sub{ margin-top:2px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <p class="school">Escuela Agrotécnica “Santa Rosa” · Ciclo lectivo 2026</p>
+    <h1>Guía del integrador · Matemática 4.º I</h1>
+    <p class="sub">Trabajo práctico integrador · Materia pendiente · Prof. Jessica Garbuglia · Versión 2</p>
+    <div class="namebar">
+      <label for="nombre">Nombre y apellido</label>
+      <input id="nombre" type="text" autocomplete="off" placeholder="Escribí tu nombre">
+      <div class="overall"><span id="overallText">0 de 21 actividades terminadas</span><div class="bar" aria-hidden="true"><span id="overallBar"></span></div></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Secciones de la guía" id="tabs"></nav>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<script>
+/* =====================  DATOS DE LA GUÍA  ===================== */
+const ACTIVIDADES = {
+  1:["Conjuntos numéricos","Decidís a qué conjuntos pertenece cada número."],
+  2:["Redondeo y truncamiento","Aproximás números y resolvés el problema del alambre para el potrero."],
+  3:["Intervalos reales","Escribís, representás en la recta e interpretás intervalos."],
+  4:["Inecuaciones","Resolvés inecuaciones y escribís la solución como intervalo y en la recta."],
+  5:["Puntos en el plano","Ubicás puntos y decís en qué cuadrante o eje está cada uno."],
+  6:["¿Es una función?","Usás la prueba de la recta vertical para decidir qué gráficos son funciones."],
+  7:["Humedad del suelo","Leés un gráfico y respondés preguntas sobre la humedad de un potrero."],
+  8:["Producción de leche","Leés un gráfico y respondés preguntas sobre la producción de una vaca."],
+  9:["Análisis de funciones","Decidís si cada función es lineal y completás pendiente, ordenada al origen, raíz y comportamiento."],
+  10:["Graficar rectas","Graficás rectas usando la pendiente y la ordenada al origen."],
+  11:["Tanque australiano","Trabajás con la función de los litros que quedan en un tanque que se vacía, con tabla y gráfico."],
+  12:["Establecimiento de engorde","Trabajás con la función del costo mensual según la cantidad de animales."],
+  13:["Venta de soja","Trabajás con la función de la ganancia según las toneladas vendidas y buscás cuándo no hay pérdida ni ganancia."],
+  14:["Rectas en el campo","Graficás cuatro rectas y las clasificás en paralelas, perpendiculares u oblicuas."],
+  15:["Ecuación de una recta","Hallás la recta que pasa por un punto y es paralela o perpendicular a otra."],
+  16:["Recta por dos puntos","Hallás la ecuación de la recta que pasa por dos puntos y trabajás con sus paralelas y perpendiculares."],
+  17:["Sistemas de ecuaciones","Resolvés sistemas por sustitución o igualación y verificás la solución."],
+  18:["Sistemas resueltos gráficamente","Resolvés sistemas graficando las rectas y buscando el punto de intersección."],
+  19:["Semillas de maíz y soja","Planteás y resolvés un sistema con los precios de las bolsas de semillas."],
+  20:["Gallinas y ovejas","Planteás y resolvés un sistema con la cantidad de animales y de patas."],
+  21:["Fardos y rollos de alfalfa","Planteás y resolvés un sistema con las ventas de fardos y rollos."]
+};
+
+/* Para completar: si Jessica indica las clases, se cargan acá, por ejemplo:
+   clases: ["Clase 1: ...", "Clase 2: ..."]   (si es null, no se muestra) */
+const TRIMESTRES = [
+  { id:"t1", nombre:"Primer trimestre",
+    temas:"Números reales · Aproximaciones · Intervalos · Inecuaciones",
+    bloques:[
+      { titulo:"Números reales y aproximaciones", acts:[1,2] },
+      { titulo:"Intervalos e inecuaciones", acts:[3,4] }
+    ],
+    clases:["Martes 17/11 · Clase 1: presentación de la guía y primer trimestre completo (actividades 1 a 4)."],
+    preguntas:[
+      "¿Cómo decidís a qué conjuntos numéricos pertenece un número? Explicalo con un ejemplo de número racional y uno de irracional.",
+      "¿Qué diferencia hay entre redondear y truncar? ¿Cuándo conviene cada uno en una situación real, como medir alambre o pagar en una caja?",
+      "¿Qué significa que un intervalo sea abierto, cerrado o semiabierto? ¿Cómo se ve en la recta numérica?",
+      "En una inecuación, ¿cuándo cambia el sentido de la desigualdad y por qué?"
+    ],
+    control:[
+      "Puedo clasificar un número en los conjuntos numéricos y justificar mi respuesta.",
+      "Puedo explicar por qué hay números que no pertenecen a ninguno de esos conjuntos.",
+      "Puedo redondear y truncar a décimos, centésimos y milésimos.",
+      "Puedo escribir un intervalo con símbolos y representarlo en la recta (y también al revés).",
+      "Puedo resolver una inecuación lineal y escribir su solución como intervalo.",
+      "Puedo explicar con mis palabras cuándo y por qué cambia el sentido de la desigualdad."
+    ],
+    situaciones:[
+      { tipo:"multi",
+        pista:"Pensá qué pedís primero (una medida de la figura) y qué hacés después con el resultado, según lo que hace el comercio.", q:"Un productor alambra un potrero rectangular y necesita saber cuántos metros de alambre comprar. El comercio redondea el resultado al décimo. No lo resuelvas: ¿qué conceptos usarías?",
+        op:[["Perímetro del rectángulo",1],["Redondeo a los décimos",1],["Truncamiento",0],["Intervalo cerrado",0],["Números irracionales",0]],
+        ex:"Necesitás calcular el perímetro (la suma de todos los lados) y después redondear a los décimos. Truncar sería cortar los decimales sin mirar la cifra que sigue, y acá el comercio redondea. Los intervalos y los números irracionales no hacen falta para este problema." },
+      { tipo:"single",
+        pista:"Fijate si los dos extremos están incluidos o no, y qué símbolo se usa en cada caso.", q:"Imaginá que una cooperativa acepta granos con humedad entre 12 % y 14 %, con ambos valores incluidos. ¿Cómo se escribe ese conjunto de valores?",
+        op:[["[12 ; 14]",1],["(12 ; 14)",0],["[12 ; 14)",0],["(12 ; 14]",0]],
+        ex:"Como el 12 y el 14 están incluidos, el intervalo es cerrado en los dos extremos: se escribe con corchetes, [12 ; 14]. Los paréntesis, en cambio, dejan afuera el extremo." }
+    ]
+  },
+  { id:"t2", nombre:"Segundo trimestre",
+    temas:"Plano cartesiano · Funciones · Función lineal",
+    bloques:[
+      { titulo:"Plano cartesiano", acts:[5] },
+      { titulo:"Funciones y lectura de gráficos", acts:[6,7,8] },
+      { titulo:"Función lineal", acts:[9,10,11,12,13] }
+    ],
+    clases:["Jueves 19/11 · Clase 2: plano cartesiano, funciones y lectura de gráficos (actividades 5 a 8).", "Martes 24/11 · Clase 3: función lineal (actividades 9 a 13)."],
+    preguntas:[
+      "¿Qué tiene que cumplir una relación para ser una función? ¿Cómo te ayuda la prueba de la recta vertical a decidirlo?",
+      "En un gráfico como el de la humedad del suelo o el de la leche, ¿cómo reconocés cuándo la función crece, decrece o es constante?",
+      "En una función lineal, ¿qué indican la pendiente y la ordenada al origen? Explicalo con una situación real, como el tanque o el costo del engorde.",
+      "¿Qué es la raíz de una función y qué representa en una situación real?",
+      "¿Cómo pasás una ecuación como 3x + y − 6 = 0 a la forma explícita (y despejada)? Contalo paso a paso."
+    ],
+    control:[
+      "Puedo ubicar puntos en el plano cartesiano e indicar en qué cuadrante o eje están.",
+      "Puedo decidir si un gráfico representa una función y justificarlo.",
+      "Puedo identificar la variable independiente y la dependiente en una situación.",
+      "Puedo leer un gráfico: valores, máximo y mínimo, tramos crecientes, decrecientes y constantes.",
+      "Puedo escribir la función lineal que modela una situación.",
+      "Puedo hallar la pendiente, la ordenada al origen y la raíz, y explicar qué significan en el contexto.",
+      "Puedo graficar una función lineal usando la pendiente y la ordenada al origen."
+    ],
+    situaciones:[
+      { tipo:"multi",
+        pista:"Pensá qué te dice el enunciado sobre cómo cambia el contenido, qué había al principio y qué momento estás buscando.", q:"Un tanque pierde agua a un ritmo constante. Querés saber en cuántas horas se vacía por completo. No lo resuelvas: ¿qué conceptos usarías?",
+        op:[["Función lineal",1],["Pendiente (el ritmo de pérdida)",1],["Ordenada al origen (el contenido inicial)",1],["Raíz (el momento en que quedan 0 litros)",1],["Sistema de ecuaciones",0],["Rectas perpendiculares",0]],
+        ex:"Hay una cantidad que baja a ritmo constante, así que se modela con una función lineal. La pendiente es el ritmo de pérdida (negativa, porque baja), la ordenada al origen es lo que había al principio, y la raíz es el momento en que quedan 0 litros: justo lo que buscás. No hay dos relaciones para cruzar ni rectas para comparar, así que no hace falta un sistema ni rectas perpendiculares." },
+      { tipo:"single",
+        pista:"Recordá qué tiene que cumplir una función para cada valor de x.", q:"Dibujás un gráfico y una recta vertical lo corta en dos puntos distintos. ¿Qué concluís?",
+        op:[["Es una función creciente",0],["No es una función: a un mismo valor de x le corresponden dos valores de y",1],["Es una función, pero no lineal",0],["Es una función lineal con pendiente negativa",0]],
+        ex:"Es la prueba de la recta vertical: en una función, cada valor de x tiene un único valor de y. Si la recta vertical corta en dos puntos, a ese x le corresponden dos valores, y entonces no es una función." }
+    ]
+  },
+  { id:"t3", nombre:"Tercer trimestre",
+    temas:"Rectas paralelas y perpendiculares · Sistemas de ecuaciones",
+    bloques:[
+      { titulo:"Rectas paralelas y perpendiculares", acts:[14,15,16] },
+      { titulo:"Sistemas de ecuaciones", acts:[17,18,19,20,21] }
+    ],
+    clases:["Jueves 26/11 · Clase 4: rectas paralelas y perpendiculares (actividades 14 a 16).", "Jueves 3/12 · Clase 5: sistemas de ecuaciones (actividades 17 a 21)."],
+    preguntas:[
+      "¿Cómo reconocés, mirando las ecuaciones, si dos rectas son paralelas, perpendiculares u oblicuas?",
+      "¿Cómo encontrás la ecuación de una recta que pasa por un punto y es paralela (o perpendicular) a otra? Explicalo paso a paso con tus palabras.",
+      "¿Cómo hallás la ecuación de la recta que pasa por dos puntos?",
+      "¿Qué significa la solución de un sistema de ecuaciones, en el gráfico y en una situación real? ¿Qué pasa con la solución si las rectas son paralelas? En este curso, las rectas que coinciden también se consideran paralelas: pensá los dos casos.",
+      "Elegí uno de los problemas del integrador (semillas, gallinas y ovejas, fardos y rollos) y explicá qué representa cada incógnita y cómo planteás las ecuaciones, sin resolverlo."
+    ],
+    control:[
+      "Puedo decidir si dos rectas son paralelas, perpendiculares u oblicuas a partir de sus pendientes.",
+      "Puedo hallar la ecuación de una recta que pasa por un punto y es paralela o perpendicular a otra.",
+      "Puedo hallar la ecuación de la recta que pasa por dos puntos.",
+      "Puedo resolver un sistema de dos ecuaciones por sustitución o igualación y verificar la solución.",
+      "Puedo resolver un sistema gráficamente e interpretar el punto de intersección.",
+      "Puedo plantear un sistema a partir de un problema, indicando qué representa cada incógnita.",
+      "Puedo explicar qué ocurre con la solución cuando las rectas de un sistema son paralelas, tanto si son distintas como si coinciden."
+    ],
+    situaciones:[
+      { tipo:"single",
+        pista:"Recordá qué relación hay entre las pendientes de dos rectas perpendiculares.", q:"Dos alambrados se modelan con rectas de pendientes 2 y −1/2. ¿Cómo son entre sí?",
+        op:[["Paralelos",0],["Perpendiculares",1],["Oblicuos, pero no perpendiculares",0],["No se puede saber sin conocer las ordenadas al origen",0]],
+        ex:"Son perpendiculares: el producto de las pendientes es −1, porque 2 · (−1/2) = −1. Las ordenadas al origen desplazan las rectas, pero no cambian su inclinación." },
+      { tipo:"multi",
+        pista:"Contá cuántas cosas no conocés y cuántas relaciones tenés; después pensá cómo las resolverías.", q:"Un productor compró 2 bolsas de maíz y 3 de soja y pagó cierto total; otro compró otras cantidades y pagó otro total. Querés averiguar el precio de cada bolsa. No lo resuelvas: ¿qué conceptos usarías?",
+        op:[["Sistema de dos ecuaciones con dos incógnitas",1],["Método de sustitución o de igualación",1],["Verificar la solución en las dos ecuaciones",1],["Redondeo a los décimos",0],["Intervalos",0]],
+        ex:"Hay dos precios que no conocés y dos compras que los relacionan: se plantea un sistema de dos ecuaciones con dos incógnitas, se resuelve por sustitución o igualación y se verifica la solución en las dos ecuaciones. El redondeo y los intervalos no hacen falta." }
+    ]
+  }
+];
+
+
+const CRONOGRAMA = [
+  ["Martes 17/11","Clase 1","Presentación de la guía y primer trimestre completo (actividades 1 a 4)"],
+  ["Jueves 19/11","Clase 2","Plano cartesiano, funciones y lectura de gráficos (actividades 5 a 8)"],
+  ["Martes 24/11","Clase 3","Función lineal (actividades 9 a 13)"],
+  ["Jueves 26/11","Clase 4","Rectas paralelas y perpendiculares (actividades 14 a 16)"],
+  ["Jueves 3/12","Clase 5","Sistemas de ecuaciones (actividades 17 a 21)"],
+  ["14 al 18/12","Cierre","Examen o defensa oral"]
+];
+
+const ESTADOS = [["pendiente","Sin empezar"],["proceso","En proceso"],["terminada","Terminada"],["ayuda","Necesito ayuda"]];
+const TOTAL_ACTS = Object.keys(ACTIVIDADES).length;
+
+/* =====================  ESTADO Y GUARDADO  ===================== */
+const KEY = "guia_integrador_4I_v2";
+let state = { nombre:"", estado:{}, casa:{}, resp:{}, ctrl:{}, sit:{} };
+let view = "ruta";
+function load(){ try{ const raw = localStorage.getItem(KEY); if(raw){ const o = JSON.parse(raw); state = Object.assign(state, o); } }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+/* =====================  UTILIDADES  ===================== */
+function el(tag, attrs, ...kids){
+  const n = document.createElement(tag);
+  for(const k in (attrs||{})){
+    if(k==="class") n.className = attrs[k];
+    else if(k==="text") n.textContent = attrs[k];
+    else if(k.startsWith("on")) n.addEventListener(k.slice(2), attrs[k]);
+    else if(attrs[k]===true) n.setAttribute(k,"");
+    else if(attrs[k]!==false && attrs[k]!=null) n.setAttribute(k, attrs[k]);
+  }
+  kids.flat().forEach(c => { if(c==null) return; n.append(c.nodeType ? c : document.createTextNode(c)); });
+  return n;
+}
+function growTA(t, min){ t.style.height="auto"; t.style.height = Math.max(min||90, t.scrollHeight+2)+"px"; }
+function actsDe(t){ return t.bloques.flatMap(b=>b.acts); }
+function terminadas(ids){ return ids.filter(i => state.estado[i]==="terminada").length; }
+function updateOverall(){
+  const n = terminadas(Object.keys(ACTIVIDADES).map(Number));
+  document.getElementById("overallText").textContent = n + " de " + TOTAL_ACTS + " actividades terminadas";
+  document.getElementById("overallBar").style.width = (n/TOTAL_ACTS*100) + "%";
+}
+function go(v){ view = v; renderTabs(); render(); window.scrollTo({top:0}); }
+
+/* =====================  PESTAÑAS  ===================== */
+function renderTabs(){
+  const tabs = document.getElementById("tabs");
+  tabs.replaceChildren();
+  const items = [["ruta","Hoja de ruta"], ...TRIMESTRES.map(t=>[t.id,t.nombre])];
+  items.forEach(([id,label],i) => {
+    const b = el("button",{role:"tab", "aria-selected": String(view===id), id:"tab-"+id, onclick:()=>go(id)}, label);
+    b.addEventListener("keydown", e => {
+      if(e.key==="ArrowRight"||e.key==="ArrowLeft"){
+        const d = e.key==="ArrowRight"?1:-1; const next = items[(i+d+items.length)%items.length][0]; go(next);
+        document.getElementById("tab-"+next).focus();
+      }
+    });
+    tabs.append(b);
+  });
+}
+
+/* =====================  HOJA DE RUTA  ===================== */
+function renderRuta(){
+  const v = el("div",{class:"view"});
+  v.append(
+    el("div",{class:"printhead"}, "Alumno/a: ", state.nombre || "…………………………………", " · Guía del integrador · Matemática 4.º I"),
+    el("div",{class:"banner"}, el("div",{class:"eyebrow",text:"HOJA DE RUTA"}), el("h2",{text:"El recorrido del integrador, trimestre por trimestre"})),
+    el("div",{class:"note"},
+      el("b",{text:"Cómo usar esta guía. "}),
+      "Esta guía te acompaña mientras resolvés el integrador: te muestra por dónde vas y te ayuda a prepararte para explicar lo que hiciste. No corrige ni certifica tu trabajo: lo que importa se ve cuando lo explicás. Las actividades las resolvés en el cuadernillo, mostrando todos los pasos: una respuesta sin justificación no cuenta como completa."),
+    el("ol",{class:"steps"},
+      el("li",{}, el("span",{class:"num",text:"1"}), el("div",{}, el("b",{text:"En clase"}), el("div",{text:"Presentamos cada trimestre y trabajamos juntos las actividades. Es el momento de preguntar todas tus dudas."}))),
+      el("li",{}, el("span",{class:"num",text:"2"}), el("div",{}, el("b",{text:"En casa"}), el("div",{text:"Terminás lo que te quedó a medias para la próxima clase. Mi compromiso como docente: siempre va a ser de un tema que ya vimos en clase, nunca de uno nuevo."}))),
+      el("li",{}, el("span",{class:"num",text:"3"}), el("div",{}, el("b",{text:"Al cerrar cada trimestre"}), el("div",{text:"Respondés las preguntas con tus palabras y te autoevaluás. Te preparan para la defensa oral o para el examen."})))
+    )
+  );
+  const tabla = el("div",{class:"cal"}, CRONOGRAMA.map(([fecha,tag,txt]) =>
+    el("div",{class:"cal-row"}, el("span",{class:"cal-date",text:fecha}), el("span",{class:"cal-tag",text:tag}), el("span",{class:"cal-txt",text:txt}))));
+  v.append(
+    el("h3",{class:"cal-h",text:"Calendario"}),
+    tabla,
+    el("div",{class:"note"},
+      el("b",{text:"Cómo termina. "}),
+      "Para rendir, tenés que haber hecho el integrador: para aprobar la materia hay que tener el integrador y aprobar el examen. La instancia final puede ser una defensa oral o un examen, según cada caso. En la defensa oral explicás con tus palabras lo que resolviste en el integrador y lo aplicás a situaciones nuevas, parecidas a las que ya hiciste. En el examen se miran la interpretación y la aplicación de ejercicios nuevos. La forma y la fecha de entrega del integrador te las indica tu docente.")
+  );
+  const cards = el("div",{class:"tcards"});
+  TRIMESTRES.forEach((t,i) => {
+    const ids = actsDe(t);
+    const listo = terminadas(ids);
+    cards.append(el("div",{class:"tcard"},
+      el("div",{class:"eyebrow",text:t.nombre.toUpperCase()}),
+      el("h3",{text:t.temas}),
+      el("ul",{}, t.bloques.map(b => el("li",{text: b.titulo + (b.acts.length>1 ? " (actividades " + b.acts[0] + "–" + b.acts[b.acts.length-1] + ")" : " (actividad " + b.acts[0] + ")")}))),
+      el("div",{class:"stats",text: listo + " de " + ids.length + " actividades terminadas"}),
+      el("button",{class:"btn", onclick:()=>go(t.id)}, "Ir al " + t.nombre.toLowerCase())
+    ));
+  });
+  v.append(cards, toolsBar());
+  return v;
+}
+
+/* =====================  TRIMESTRE  ===================== */
+function seccion(n, titulo, lead){
+  const s = el("section",{class:"block"}, el("h3",{}, el("span",{class:"n",text:String(n)}), titulo));
+  if(lead) s.append(el("p",{class:"lead",text:lead}));
+  return s;
+}
+function renderTrimestre(t){
+  const idx = TRIMESTRES.indexOf(t);
+  const v = el("div",{class:"view"});
+  v.append(
+    el("div",{class:"printhead"}, "Alumno/a: ", state.nombre || "…………………………………", " · Guía del integrador · Matemática 4.º I"),
+    el("div",{class:"banner"}, el("div",{class:"eyebrow",text:t.nombre.toUpperCase()}), el("h2",{text:t.temas}))
+  );
+
+  /* 1. Recorrido */
+  const s1 = seccion(1,"Recorrido","Marcá cómo vas con cada actividad. Si algo no te sale, elegí “Necesito ayuda” y llevalo a la próxima clase: para eso está.");
+  if(t.clases && t.clases.length){
+    s1.append(el("div",{class:"clases"}, el("b",{text:"Clases estipuladas"}), el("ol",{}, t.clases.map(c=>el("li",{text:c})))));
+  }
+  t.bloques.forEach(b => {
+    const bl = el("div",{class:"bloque"}, el("h4",{text:b.titulo}));
+    b.acts.forEach(n => {
+      const st = state.estado[n] || "pendiente";
+      const sel = el("select",{"aria-label":"Estado de la actividad "+n, onchange:e=>{
+        state.estado[n] = e.target.value; row.dataset.st = e.target.value; save(); updateOverall();
+      }}, ESTADOS.map(([val,lab]) => el("option",{value:val, selected: val===st}, lab)));
+      const row = el("div",{class:"act","data-st":st},
+        el("span",{class:"chip",text:"A"+n}),
+        el("div",{}, el("div",{class:"t",text:ACTIVIDADES[n][0]}), el("div",{class:"d",text:ACTIVIDADES[n][1]})),
+        sel);
+      bl.append(row);
+    });
+    s1.append(bl);
+  });
+  v.append(s1);
+
+  /* 2. Para casa */
+  const s2 = seccion(2,"Para terminar en casa","Tu docente te dice qué terminar para la próxima clase, y siempre es algo que ya vimos juntos. Anotá acá qué te quedó pendiente.");
+  const ta = el("textarea",{rows:"3","aria-label":"Lo que me quedó a medias", placeholder:"¿Qué actividad te quedó a medias? ¿Qué te falta para terminarla?"});
+  ta.value = state.casa[t.id] || "";
+  ta.addEventListener("input",()=>{ state.casa[t.id]=ta.value; save(); growTA(ta); });
+  s2.append(ta);
+  v.append(s2);
+
+  /* 3. Preguntas orientadoras */
+  const s3 = seccion(3,"Preguntas para preparar la defensa oral","Respondé con tus palabras, como si se lo explicaras a un compañero. No hace falta copiar del cuadernillo ni usar palabras difíciles: lo importante es que puedas explicar lo que resolviste.");
+  t.preguntas.forEach((q,i) => {
+    const id = t.id+"-"+i;
+    const area = el("textarea",{id:"q-"+id, rows:"3", placeholder:"Tu respuesta, con tus palabras…"});
+    area.value = state.resp[id] || "";
+    area.addEventListener("input",()=>{ state.resp[id]=area.value; save(); growTA(area); });
+    s3.append(el("div",{class:"q"}, el("label",{for:"q-"+id}, (i+1)+". "+q), area));
+  });
+  v.append(s3);
+
+  /* 4. ¿Voy entendiendo? */
+  const s4 = seccion(4,"¿Voy entendiendo?","Dos formas de autoevaluarte: una lista para marcar lo que ya podés hacer, y situaciones en las que no tenés que calcular nada, solo decidir qué conceptos usarías. Son una ayuda para prepararte, no una prueba de que entendiste: eso se ve cuando lo explicás.");
+  s4.append(el("h4",{style:"margin:6px 0 8px;font-family:Calibri,sans-serif;color:#2E7D3E;font-size:17px",text:"Marcá lo que ya podés hacer sin mirar el cuadernillo"}));
+  const ul = el("ul",{class:"checklist"});
+  const counter = el("p",{class:"counter",role:"status","aria-live":"polite"});
+  const updC = () => {
+    const n = t.control.filter((_,i)=>state.ctrl[t.id+"-"+i]).length, tot = t.control.length;
+    let msg = "Marcaste " + n + " de " + tot + ". ";
+    if(n===0) msg = "Todavía no marcaste ninguno. Leé cada punto y marcá los que ya podés hacer sin mirar.";
+    else if(n===tot) msg += "Los marcaste todos: probá explicarlos en voz alta, sin mirar el cuadernillo.";
+    else if(n < tot/2) msg += "Todavía hay varios puntos para repasar. Anotá cuáles y llevalos a la próxima clase.";
+    else msg += "Vas bien. Fijate cuáles te faltan y pensá qué necesitás para poder marcarlos.";
+    counter.textContent = msg;
+  };
+  t.control.forEach((txt,i) => {
+    const id = t.id+"-"+i;
+    const cb = el("input",{type:"checkbox", checked: !!state.ctrl[id], onchange:e=>{ state.ctrl[id]=e.target.checked; save(); updC(); }});
+    ul.append(el("li",{}, el("label",{}, cb, el("span",{text:txt}))));
+  });
+  s4.append(ul, counter);
+  updC();
+
+  s4.append(el("h4",{style:"margin:10px 0 8px;font-family:Calibri,sans-serif;color:#2E7D3E;font-size:17px",text:"Sin calcular: ¿qué conceptos usarías?"}));
+  t.situaciones.forEach((s,i) => s4.append(renderSituacion(t.id+"-s"+i, s)));
+  v.append(s4);
+
+  /* paginación */
+  const pager = el("div",{class:"pager"});
+  pager.append(idx>0 ? el("button",{class:"btn ghost",onclick:()=>go(TRIMESTRES[idx-1].id)},"← "+TRIMESTRES[idx-1].nombre) : el("button",{class:"btn ghost",onclick:()=>go("ruta")},"← Hoja de ruta"));
+  pager.append(idx<TRIMESTRES.length-1 ? el("button",{class:"btn",onclick:()=>go(TRIMESTRES[idx+1].id)},TRIMESTRES[idx+1].nombre+" →") : el("button",{class:"btn",onclick:()=>go("ruta")},"Volver a la hoja de ruta"));
+  v.append(pager, toolsBar());
+  return v;
+}
+
+/* =====================  SITUACIONES (autocorrección)  ===================== */
+function renderSituacion(id, s){
+  const MAX = 3;
+  const type = s.tipo==="single" ? "radio" : "checkbox";
+  const unica = s.tipo==="single";
+  let st = Object.assign({ sel:[], intentos:0, resuelta:false, revelada:false }, state.sit[id]||{});
+  const box = el("div",{class:"sit"});
+  box.append(el("p",{class:"sq",text:s.q}));
+  const opts = el("div",{class:"opts"});
+  const labels = [];
+  s.op.forEach(([txt,ok],i) => {
+    const inp = el("input",{type:type, name:"sit-"+id, value:String(i), checked: st.sel.includes(i)});
+    const mark = el("span",{class:"mark"});
+    const lab = el("label",{class:"opt"}, inp, el("span",{text:txt, class: /^[\[\(]/.test(txt) ? "sym" : ""}), mark);
+    labels.push({lab,inp,mark,ok});
+    opts.append(lab);
+  });
+  const fb = el("div",{class:"feedback",hidden:true,role:"status","aria-live":"polite"});
+  const bCheck = el("button",{class:"btn small",type:"button"},"Comprobar");
+  const bRetry = el("button",{class:"btn ghost small",type:"button",hidden:true},"Volver a empezar");
+
+  function limpiar(){ labels.forEach(({lab,mark}) => { lab.classList.remove("ok","no","miss"); mark.textContent=""; }); }
+  function marcar(){
+    labels.forEach(({lab,inp,mark,ok}) => {
+      lab.classList.remove("ok","no","miss"); mark.textContent="";
+      const sel = inp.checked;
+      if(sel && ok){ lab.classList.add("ok"); mark.textContent = unica ? "✔ Correcta" : "✔ Sí"; }
+      else if(sel && !ok){ lab.classList.add("no"); mark.textContent = unica ? "✘ No es esta" : "✘ No hace falta"; }
+      else if(!sel && ok){ lab.classList.add("miss"); mark.textContent = unica ? "• Esta era la correcta" : "• Te faltó"; }
+    });
+  }
+  function bloquear(v){ labels.forEach(({inp}) => { inp.disabled = v; }); }
+  function pintar(){
+    if(st.resuelta){
+      marcar(); bloquear(true);
+      fb.hidden = false; fb.className = "feedback good";
+      fb.replaceChildren(el("b",{text: st.intentos===1 ? "¡Muy bien!" : "Lo lograste en el intento " + st.intentos + ". Mirá por qué:"}), s.ex);
+      bCheck.hidden = true; bRetry.hidden = false;
+    } else if(st.revelada){
+      marcar(); bloquear(true);
+      fb.hidden = false; fb.className = "feedback almost";
+      fb.replaceChildren(el("b",{text:"Después de " + MAX + " intentos, acá va la explicación:"}), s.ex);
+      bCheck.hidden = true; bRetry.hidden = false;
+    } else if(st.intentos > 0){
+      limpiar(); bloquear(false);
+      fb.hidden = false; fb.className = "feedback almost";
+      fb.replaceChildren(el("b",{text:"Todavía no (intento " + st.intentos + " de " + MAX + ")"}), "Releé la situación y probá de nuevo. Pista: " + s.pista);
+      bCheck.hidden = false; bRetry.hidden = true;
+    } else {
+      limpiar(); bloquear(false); fb.hidden = true; bCheck.hidden = false; bRetry.hidden = true;
+    }
+  }
+  bCheck.addEventListener("click", () => {
+    const sel = labels.map((l,i) => l.inp.checked ? i : -1).filter(i => i>=0);
+    if(!sel.length){ fb.hidden=false; fb.className="feedback"; fb.replaceChildren(el("b",{text:"Elegí al menos una opción"}),"Marcá lo que te parezca y después comprobá."); return; }
+    const acierta = labels.every(({inp,ok}) => inp.checked === !!ok);
+    st.sel = sel; st.intentos += 1;
+    if(acierta) st.resuelta = true; else if(st.intentos >= MAX) st.revelada = true;
+    state.sit[id] = st; save(); pintar();
+  });
+  bRetry.addEventListener("click", () => {
+    labels.forEach(({inp}) => { inp.checked = false; });
+    st = { sel:[], intentos:0, resuelta:false, revelada:false };
+    state.sit[id] = st; save(); pintar();
+  });
+
+  box.append(opts, bCheck, bRetry, fb);
+  pintar();
+  return box;
+}
+
+/* =====================  HERRAMIENTAS  ===================== */
+function toolsBar(){
+  return el("div",{class:"tools"},
+    el("button",{class:"btn ghost small",onclick:()=>{ window.print(); }},"Imprimir o guardar en PDF"),
+    el("button",{class:"btn ghost small",onclick:()=>{ if(confirm("¿Querés borrar todo lo que escribiste y marcaste en esta guía?")){ state={nombre:"",estado:{},casa:{},resp:{},ctrl:{},sit:{}}; save(); document.getElementById("nombre").value=""; updateOverall(); render(); } }},"Empezar de nuevo"),
+    el("p",{class:"privacy",text:"Lo que escribís y marcás se guarda solo en esta computadora, en este navegador. No se envía a nadie: si querés mostrárselo a tu docente, imprimilo o guardalo en PDF."})
+  );
+}
+
+/* =====================  RENDER  ===================== */
+function render(){
+  const app = document.getElementById("app");
+  app.replaceChildren();
+  if(view==="ruta") app.append(renderRuta());
+  else app.append(renderTrimestre(TRIMESTRES.find(t=>t.id===view)));
+  app.querySelectorAll("textarea").forEach(growTA);
+}
+window.addEventListener("beforeprint",()=>{
+  // En papel se muestran todas las secciones juntas
+  const app = document.getElementById("app");
+  const prev = app.innerHTML; // no se altera el estado; solo se agrega el contenido restante
+  window.__prevView = view;
+  app.replaceChildren(renderRuta(), ...TRIMESTRES.map(renderTrimestre));
+  app.querySelectorAll("textarea").forEach(t => growTA(t, 46));
+});
+window.addEventListener("afterprint",()=>{ view = window.__prevView || view; render(); });
+
+load();
+document.getElementById("nombre").value = state.nombre || "";
+document.getElementById("nombre").addEventListener("input",e=>{ state.nombre = e.target.value; save(); });
+renderTabs(); updateOverall(); render();
+</script>
+</body>
+</html>
